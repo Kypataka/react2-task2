@@ -1,60 +1,80 @@
-import styles from './app.module.css'
+import styles from './app.module.css';
+import data from './data.json';
 import { useState } from 'react'
 
+export const App = () => {
+	const [steps, setSteps] = useState(data)
+	const [activeIndex, setActiveIndex] = useState(0)
 
-export function App() {
-	const [value, setValue] = useState('')
-	const [list, setList] = useState([])
-	const [error, setError] = useState('')
+	const isFirstStep = activeIndex === 0
+	const isLastStep = activeIndex === steps.length - 1
 
-	const onInputButtonClick = () => {
-		const promptValue = prompt('Введите значение')
-
-		if (promptValue.length < 3) {
-			setError("Введённое значение должно содержать минимум 3 символа")
-		} else {
-			setValue(promptValue)
-			setError('')
+	const clickBack = () => {
+		if(!isFirstStep) {
+			setActiveIndex(prev => prev - 1)
 		}
+  	}
+
+	const clickForward = () => {
+		if(!isLastStep) {
+			setActiveIndex(prev => prev + 1)
+		}
+  	}
+
+	const startFromBeginning = () => {
+		setActiveIndex(0)
 	}
 
-	let isValueVaild = false
-	if (value.length >= 3) {
-		isValueVaild = true
+	const selectStep = (index) => {
+		setActiveIndex(index)
 	}
 
+	return (
+		<div className={styles.container}>
+			<div className={styles.card}>
+				<h1>Инструкция по готовке пельменей</h1>
+				<div className={styles.steps}>
+					<div className={styles['steps-content']}>
+						{steps[activeIndex].content}
+					</div>
 
-	const onAddButtonClick = () => {
-		const updatedList = [...list, {id: Date.now(), value}]
-		setList(updatedList)
-		setValue('')
-	}
+					<ul className={styles['steps-list']}>
+						{steps.map((step, index) => (
+							<li
+								key={step.id}
+								className={
+									styles['steps-item'] +
+									(index <= activeIndex ? ' ' + styles.done : '') +
+									(index === activeIndex ? ' ' + styles.active : '')
+								}
+							>
+								<button
+									className={styles['steps-item-button']}
+									onClick={() => selectStep(index)}
+								>
+									{index + 1}
+								</button>
+								{step.title}
+							</li>
+						))}
+					</ul>
 
-  return (
-    <>
-		<div className={styles.app}>
-			<h1 className={styles.pageHeading}>Ввод значения</h1>
-			<p className="no-margin-text">
-				Текущее значение <code>value</code>: "<output className={styles.currentValue}>{value}</output>"
-			</p>
-			{error && <div className="error">{error}</div>}
-			<div className={styles.buttonsContainer}>
-				<button className="button" onClick={onInputButtonClick}>Ввести новое</button>
-				<button className="button" disabled={!isValueVaild} onClick={onAddButtonClick}>Добавить в список</button>
-			</div>
-			<div className={styles.listContainer}>
-				<h2 className={styles.listHeading}>Список</h2>
-				{list.length === 0 ? ( <p className="no-margin-text">Нет добавленных элементов</p>
-			) : (
-				<ul className={styles.list}>
-					{list.map(item => (
-						<li key={item.id} className={styles.listItem}>{item.value}</li>
-					))}
-				</ul>
-			)}
+					<div className={styles['buttons-container']}>
+						<button
+							className={styles.button}
+							onClick={clickBack}
+							disabled={isFirstStep}
+						>Назад
+						</button>
+						<button
+							className={styles.button}
+							onClick={isLastStep ? startFromBeginning : clickForward}
+						>
+							{isLastStep ? 'Начать сначала' : 'Далее'}
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
-    </>
-  )
-}
-
+	)
+};

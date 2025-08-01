@@ -1,3 +1,9 @@
+:root {
+	--accent-color-hue: 236;
+	--accent-color-saturation: 100%;
+	--disabled-color: #cfcfcf;
+}
+
 body {
 	margin: 0;
 	font-family:
@@ -11,52 +17,4 @@ body {
 code {
 	font-family:
 		source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-:root {
-	--accent-color-hue: 236;
-	--accent-color-saturation: 100%;
-	--disabled-color: #cfcfcf;
-	--error-color: #d40000;
-}
-
-.error {
-	color: var(--error-color);
-	font-weight: bold;
-}
-
-.no-margin-text {
-	margin: 0;
-}
-
-.button {
-	padding: 0.5em 0.75em;
-	background-color: hsl(
-		var(--accent-color-hue),
-		var(--accent-color-saturation),
-		92%
-	);
-	font-size: 18px;
-	border: none;
-	transition: background-color 0.15s ease;
-}
-
-.button:hover {
-	background-color: hsl(
-		var(--accent-color-hue),
-		var(--accent-color-saturation),
-		87%
-	);
-}
-
-.button:active {
-	background-color: hsl(
-		var(--accent-color-hue),
-		var(--accent-color-saturation),
-		82%
-	);
-}
-
-.button:disabled {
-	background-color: var(--disabled-color);
 }
